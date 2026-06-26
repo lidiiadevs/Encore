@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct EncoreApp: App {
@@ -13,5 +14,6 @@ struct EncoreApp: App {
         WindowGroup {
             AttendedView()
         }
+        .modelContainer(for: Show.self)
     }
 }
