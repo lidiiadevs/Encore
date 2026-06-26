@@ -11,14 +11,21 @@ import SwiftUI
 //V - are layout and gesture only. No data fetching
 
 struct AttendedView: View {
+    @State private var shows: [Show] = []
+    
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List(shows) { show in
+                Text(show.artistName)
+            }
+            .navigationTitle("Attended")
+            .toolbar{
+                Button("Add Show", systemImage: "plus") {
+                    shows.append(Show(artistName: "Radiiohead", venueName: "Madison Square Garden", city: "New York", date: .now, status: .attended))
+                }
+            }
         }
-        .padding()
     }
 }
 
