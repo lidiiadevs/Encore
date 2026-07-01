@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 //VM's job is to hold a state that belongs to a screen, not a state that belongs to a view - that's the distinction
 @Observable
@@ -22,5 +23,9 @@ final class AttendedViewModel {
             $0.city.localizedCaseInsensitiveContains(searchText)
         }
     }
+    
+    func delete(_ show: Show, context: ModelContext) {
+            context.delete(show)
+        }
 }
 

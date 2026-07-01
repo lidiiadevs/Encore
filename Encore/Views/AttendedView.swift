@@ -6,23 +6,46 @@
 //
 
 import SwiftUI
+import SwiftData
 
 //VM - business logic and state, no UI layout
 //V - are layout and gesture only. No data fetching
 
+
 struct AttendedView: View {
-    @State private var shows: [Show] = []
+    @Query(sort: \Show.date, order: .reverse) private var allShows: [Show]
+    @Environment(\.modelContext) private var modelContext
     
+    @State private var viewModel = AttendedViewModel()
     
     var body: some View {
+        @Bindable var vm = viewModel
+        
         NavigationStack {
-            List(shows) { show in
-                Text(show.artistName)
+            Group {
+                if viewModel.filteredShows(allShows).isEmpty {
+                    ContentUnavailableView("No Results", systemImage: "magnifyingglass")
+                } else {
+                    List {
+                        ForEach(viewModel.filteredShows(allShows)) {
+                            show in
+                            Text(show.artistName)
+                        }
+                        .onDelete {
+                            indexSet in
+                            let shows = viewModel.filteredShows(allShows)
+                            for index in indexSet {
+                                viewModel.delete(shows[index], context: modelContext)
+                            }
+                        }
+                    }
+                }
             }
             .navigationTitle("Attended")
-            .toolbar{
+            .searchable(text: $vm.searchText, prompt: "Artists, Venues, Cities")
+            .toolbar {
                 Button("Add Show", systemImage: "plus") {
-                    shows.append(Show(artistName: "Radiiohead", venueName: "Madison Square Garden", city: "New York", date: .now, status: .attended))
+                    modelContext.insert(Show(artistName: "Taylor Swift", venueName: "Madison Square", city: "NYC", date: .now, status: .attended))
                 }
             }
         }
