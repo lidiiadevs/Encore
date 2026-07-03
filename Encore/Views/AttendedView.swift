@@ -29,7 +29,9 @@ struct AttendedView: View {
                     List {
                         ForEach(viewModel.filteredShows(allShows)) {
                             show in
-                            Text(show.artistName)
+                            NavigationLink(value: show) {
+                                ShowRowView(show: show)
+                            }
                         }
                         .onDelete {
                             indexSet in
@@ -43,10 +45,16 @@ struct AttendedView: View {
             }
             .navigationTitle("Attended")
             .searchable(text: $vm.searchText, prompt: "Artists, Venues, Cities")
+            .navigationDestination(for: Show.self) { show in
+                //ShowDetailView()
+            }
             .toolbar {
                 Button("Add Show", systemImage: "plus") {
-                    modelContext.insert(Show(artistName: "Taylor Swift", venueName: "Madison Square", city: "NYC", date: .now, status: .attended))
+                    viewModel.showingAddSheet = true
                 }
+            }
+            .sheet(isPresented: $vm.showingAddSheet) {
+                AddEditShowView()
             }
         }
     }
