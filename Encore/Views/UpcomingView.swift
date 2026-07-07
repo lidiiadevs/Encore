@@ -26,6 +26,12 @@ struct UpcomingView: View {
                             NavigationLink(value: show) {
                                 ShowRowView(show: show)
                             }
+                            .swipeActions(edge: .leading) {
+                                Button("Attend") {
+                                    viewModel.showToMarkAttended = show
+                                }
+                                    .tint(.green)
+                            }
                         }
                         .onDelete { indexSet in
                            let shows =
@@ -38,9 +44,8 @@ struct UpcomingView: View {
                 }
             }
             .navigationTitle("Upcoming")
-            .navigationDestination(for: Show.self) {
-                show in
-                //ShowDetailView
+            .navigationDestination(for: Show.self) { show in
+                ShowDetailView(show: show)
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -50,7 +55,11 @@ struct UpcomingView: View {
                 }
             }
             .sheet(isPresented: $vm.showingAddSheet) {
-                AddEditShowView()
+                AddEditShowView(initialStatus: .upcoming)
+            }
+            .sheet(item: $vm.showToMarkAttended) { //this takes optional binding
+                show in
+                MarkAttendedSheet(show: show, viewModel: $viewModel)
             }
         }
     }

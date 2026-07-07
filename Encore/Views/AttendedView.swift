@@ -46,7 +46,7 @@ struct AttendedView: View {
             .navigationTitle("Attended")
             .searchable(text: $vm.searchText, prompt: "Artists, Venues, Cities")
             .navigationDestination(for: Show.self) { show in
-                //ShowDetailView()
+                ShowDetailView(show: show)
             }
             .toolbar {
                 Button("Add Show", systemImage: "plus") {
@@ -54,7 +54,7 @@ struct AttendedView: View {
                 }
             }
             .sheet(isPresented: $vm.showingAddSheet) {
-                AddEditShowView()
+                AddEditShowView(initialStatus: .attended)
             }
         }
     }
