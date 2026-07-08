@@ -76,9 +76,33 @@ struct ShowDetailView: View {
                 }
             }
         }
-//        .toolbar {
-//            ToolbarItem()
-//        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button("Edit Show") {
+                        showingEditSheet = true
+                    }
+                    Divider()
+                    Button("Delete Show", role: .destructive) {
+                        showingDeleteAlert = true
+                    }
+                } label : {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showingEditSheet) {
+            AddEditShowView(show: show)
+        }
+        .alert("Delete Show?", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                modelContext.delete(show)
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently remove \(show.artistName) from your history")
+        }
     }
 }
 
