@@ -31,6 +31,8 @@ final class AddEditShowViewModel {
             artistName = show.artistName
             venueName = show.venueName
             city = show.city
+            date = show.date
+            status = show.status
             rating = show.rating ?? 0
             notes = show.notes ?? ""
             setlist = show.setlist
