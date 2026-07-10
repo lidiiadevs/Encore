@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct EmptyStateView: View {
+    let icon: String
+    let title: String
+    let message: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ContentUnavailableView(title, systemImage: icon, description: Text(message))
     }
 }
 
-#Preview {
-    EmptyStateView()
-}
+
